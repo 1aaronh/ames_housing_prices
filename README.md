@@ -14,8 +14,7 @@
 - The training and testing data for this analysis was divided between two separate files.
 - The training data source is the Ames housing data set compiled from the respective county assessor's office.
 - Initial features from this dataset consisted of continuous, discrete, ordinal, and nominal types.
-- The associated Data Dictionary is linked to here for ease of reference:
----link---
+- The associated Data Dictionary is linked to here for ease of reference: http://jse.amstat.org/v19n3/decock/DataDocumentation.txt
 - The testing data is of unknown origin for the purposes of modeling.
 - The testing data was put through the same preprocessing sequence as the training data in advance of transformation and model prediction.
 ----------------
