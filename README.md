@@ -1,126 +1,102 @@
-# DSI_Project_2
+# Ames Iowa Housing Prices - Analysis & Regression Model:
+---
+# Problem Statement:
+---
+Which features of a home closely correspond to its price realized at sale? Can we develop a high quality regression model that can predict a home's sale price after isolating te best quality combinations of features?
 
-----------------
-## Problem Statement:
+# Data & Background:
+---
+The data for analysis originates from the Ames dataset Kaggle competition for predicting housing prices. The following report discusses the model and results without reference to participation in the competition.
 
-- Where do we see benefits to a home's value? Where does Ames IA stand out and how does out study of homes in Ames help us find the3se benefits elsewhere?
+The native dataset was published by the Journal of Statistics Education and includes a [Data Dictionary](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt) that informed the pre-processing decisions and choices of encoding for categorical features. The original source of the data is information from the county assessor's office and was compiled by the publisher.
 
-----------------
-## Methods & Sources:
-- This analysis was conducted using a combination of multiple regression methods.
-- The departure for the analysis was OLS regression with the results of this model compared against Lasso and Ridge models.
-- ScikitLearn's corresponding modules were utilized for model production.
-- Hyperparamaters were adjusted manually for the Lasso and Ridge models, with results evaluated ad-hoc.
-- The training and testing data for this analysis was divided between two separate files.
-- The training data source is the Ames housing data set compiled from the respective county assessor's office.
-- Initial features from this dataset consisted of continuous, discrete, ordinal, and nominal types.
-- The presentation included a population reference for Ames, IA that was from this source:
-https://www.census.gov/quickfacts/amescityiowa
-- The associated Data Dictionary is linked to here for ease of reference:     http://jse.amstat.org/v19n3/decock/DataDocumentation.txt
-- The testing data is of unknown origin for the purposes of modeling.
-- The testing data was put through the same preprocessing sequence as the training data in advance of transformation and model prediction.
-----------------
+The data includes 78 predictive features that correspond to different attributes of a home in Ames. These features include types that are continuous, discreet, nominal and ordinal. 44 features were categorical with 21 nominal and 23 ordinal respectively. These features were all encoded in advance of modeling.
 
-## Initial Cleaning & Organization
-- Null values were filled with guidance from the provided Data Dictionary.
-- An observed house that lacked a given feature was designated at '0' for the feature.
-- Ordinal features were ranked beginning at 1 with 1 being the 'best'.  This required reversing the orginal ranks for a few features.  This was done for ease of comparison among ranked features.
-- Two features related to the presence of a swimming pool were dropped as they were composed of mostly null values.
-- One hot encoding was applied to all nominal features.
-- Some encoded features were not shared between the training and testing datasets. These features were regretably ignored in the interest of time.
-----------------
+The feature 'SalePrice' is the target for analysis.
 
-## EDA
-- One dimensional heatmaps were constructed to identify correlations with the target feature.
-- Scatterplots were utilized for continuous features.
-- Histograms were used for ordinal features with the x-axis corresponding to the ranking.
-- Boxplots were utilized to identify categorical features with many outliers or no outliers.
-- A particular feature, 'Year Built' was often not considered for modeling as it is likely significantly colinear with other explanatory features. 
------------------
+A simple linear regression model was used for analysis. Subsequent models were tested using Ridge and Lasso regularization methods. The analysis concludes with the use of Principal Component Analysis (PCA) for feature extraction and comparison of model results. 
 
-## Modeling
-- Different combinations of features were selected.
-- One combination was selected from the features that had the strongest correlaitons with the target as seen from the heatmaps.
-- General experiments were done selecting features of a given type (ordinal, continuous, etc.)
-- Features were also selected in groups that could be scaled or not scaled in unison.
-- Some of the groups of features that were scaled were also modeled without scaling.
-- The feature combination that delivered the best score for Kaggle was not intuitive for answering the problem statement. This initial limitation had an advantage in that more trial and error experiments could be done for the submissions.
-- OLS, Lasso and Ridge models were utilized for comparison.
-- Hyperparameters for Lasso and Ridge were adjusted for fine-tuning.
-- Slight possible heteroskedasticity was detected from scatterplots.
-- The model errors did appear to follow an approximately normal distribution.
-------------------
+# EDA:
+---
+Validating intuition, we can visualize neighborhoods in Ames with the highest average home price:
 
-## Results
-- Satisfactory results were provided by a scaled set of 32 continuous and discreet features.
-- The scores are presented rounded to two decimal places.
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/top10_neighborhood.png)
 
-- The OLS model:--
-  Train r2: .78
-  Test r2: .82
-  Train CVS: .77
-  Test CVS: .77
-  RMSE: 32861.56
-  
-  Strongly Positive Coefficients:--
-  - Year Built: 11652.5
-  - Year Remod/Add: 11755.6
-  - Garage Cars: 9430.95
-  - Bsmt Full Bath: 6128.27
-  - Garage Area: 6270.66
-  - Fireplaces: 6859.95
-  - Screen Porch: 6209.03
+The feature 'Year Built' was also useful for visualization when compared against the sale price. Generally, newer homes fetched higher prices but this background was illuminated further when we set the Seaborn 'hue' parameter to different categorical features. Examples are below:
 
-  Strongly Negative Coefficients:--
-  - Bedroom AbvGr: -7368.15
-  - Pool Area: -6771.63
-  - Garage Yr Blt: -4854.65
-  
-- The Ridge Model:--
-  Train r2: .78
-  Test r2: .82
-  Train CV: .78
-  Test CV: .82
-  
-  Strongly Positive Coefficients:--
-  - Year Built: 11534.6
-  - Year Remod/Add: 11778.4
-  - Garage Cars: 9262.15
-  - Bsmt Full Bath: 6145.06
-  - Garage Area: 6412.74
-  - Fireplaces: 6865.14
-  - Screen Porch: 6175.93
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/yearbuilt_neighborhood.png)
+We can see a more precise visualization of neiborhoods that show different average prices when we se the ages of the homes as well.
 
-  Strongly Negative Coefficients:--
-  - Bedroom AbvGr: -7174.18
-  - Pool Area: -6697.25
-  - Garage Yr Blt: -4718.49
-  
-- The Lasso Model:--
-  Train r2: .78
-  Test r2: .82
-  Train CV: .78
-  Test CV: .82
-  
-  Strongly Positive Coefficients:--
-  - Fireplaces: 10754.3
-  - TotRms AbvGrd: 6628.49
-  - Year Remod/Add: 11778.4
-  - Bsmt Full Bath: 11721.8
-  - Full Bath: 4280.11
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/yearbuilt_overall.png)
+This is an interesting observation that the newest and most expensive homes ranked in the middle for 'Overall Condition'.
 
-  Strongly Negative Coefficients:--
-  - Kitchen AbvGr: -39417.8
-  - Bedroom AbvGr: -8925.3
-  - Half Bath: -3030.39
-  
-- All models returned almost identical r2 scores even with reasonably large adjustments to hyperparameters.
-- The Lasso model attributed stronger influence to a different group of coefficients.
------------------
+# Model Preprocessing:
+---
+Most of the preprocessing was to enable encoding of categorical features. All nominal features were One Hor Encoded The ordinal features had their categories standardized to each carry names from best to worst of 'Ex', 'Gd', 'TA', 'Fa', 'Po' and 'NA'. Guidance for using these categorical names was taken from the native data dictionary. Standardization was done by mapping dictionaries of the names to each ordinal feature. After standardizing the names, the ordinal features were encoded with Sckit-learn's OrdinalEncoder method. Ordinally encoded numbers started as ranks from number 5 being 'best'.
 
-## Conclusions:
-- One hot encoded variables were difficult to interpret as many had very limited observations.
-- The highest score submitted to Kaggle was produced by all features (original and engineered) from data that was not scaled.
-- This score in particulay may not by reliable until further analysis is done.
-- Next steps would be including hypothesis tests and more thorough tests for linear assumptions to validate these results.
-  
+Null values were filled with 0 and irrelevant columns were dropped from the Dataframe.
+
+The total number of predictor features after One Hot Encoding rose to 193 with essentially none of them independent of one another. This became the basis for appling feature extraction with PCA.
+
+# Modeling, Regularization & Feature Transformation:
+---
+Train Test Split was applied and the data was scaled into z-scores with Scikit-learn's StandardScaler.
+
+A Linear regression model as instantiated and evaluated before any regularization or PCA. This model was fit with all of the 193 features and delivered dismal results without any regularization or feature extraction. The results of the regression model once regularized are presented below.
+
+R squared is the basis for interpreting model output. We will also consider Root Mean Squared Error (RMSE).
+
+### Ridge Model:
+Due to the singifant amount of overlapping features, the regularization strength had to be set very high with the Ridge model's alpha parameter set to 8000.
+
+This regularization strength delivered a training score of .769 and a testing score of .723. This was a significant improvement from when no regularization was applied, with only modest overfitting. Below are the Ridge model metrics:
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/ridge_scatter.png)
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/ridge_hist.png)
+In spite of the decent scores, the Ridge model does not entirely satisfy regression assumptions. The residuals do not quite follow a normal distribution.
+
+The Ridge Model delivered a RMSE of 42,138.50. Transforming this number into dollars we have an idea of the error range of our housing price predictions. This is a high degree of error but it gives us room to experiment further with regularization.
+
+### Lasso Model:
+The Lasso model also required significantly high regularization strength with a value of alpha at 1500. Alpha having a value this high reduced many feature coefficients to 0 but with only modest improvements to model scores. The Lasso Model printed a train score of .899 and a test score of .757. These scores would only improve minimally even with much larger increases in regularization strength.
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/lasso_scatter.png)
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/lasso_hist.png)
+Here and with decent model scores, we can say that the residuals for the Lasso model follow an approximately normal distribution.
+
+The Ridge Model delivered a RMSE of 39,389.44. This is still high but is encouraging for Lasso Regularization in that the model had to analyze the same 193 features with no feature extraction.
+
+We can see now that feature extraction from the set of 193 can likely improve our model's output and this leads to our next section.
+
+# PCA:
+---
+The linear regression model was trained on 10 principal components for comparision of output to the previous models. A PCA object was instantiated and fit on the same scaled data.
+
+We can verify that the 10 Principal Components extracted are not correlated with one another in contrast to the 193 previous features:
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_correlation.png)
+Effectively no correlation to speak of.
+
+The model fit on the 10 principal components delivered a train score of .835 and a test score of .754. This is about the same testing accuracy as the Lasso model but with less overfitting. The PCA model's metrics are below:
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_scatter.png)
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_hist.png)
+Training the model with PCA also satisfies regression assumptions.
+
+We can also visualize how the principal components individually influence a predicted sale price by charting the values of each component's coefficient:
+
+![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_coefficients.png)
+Fascinating result showing the marginal decrease in influence with each new Principal Component.
+
+The RMSE for the PCA model was 39,623.19. This is slighly higher than that of the Lasso model but again with less overfitting. Further experiments with different hyperparameters for PCA can be done to see if this metric can be improved.
+
+# Conclusions & Next Steps:
+---
+The models' predictions were respectable. The RMSE scores were high, but were reduced in a pattern that points to the appropriateness of using regularization and feature extraction for improiving model results.
+
+Lasso regularization and PCA offered two directions for managing the initially large and unmanageable amount of features. Starting with different subsets of these features or using more advanced modeling techinques can be another point of departure on what was discovered from the models.
+
+Additional experiments with different numbers of Principal components can also be conducted to see if PCA is a relaible improvement with respect to Lasso regularization.
