@@ -25,9 +25,11 @@ Validating intuition, we can visualize neighborhoods in Ames with the highest av
 The feature 'Year Built' was also useful for visualization when compared against the sale price. Generally, newer homes fetched higher prices but this background was illuminated further when we set the Seaborn 'hue' parameter to different categorical features. Examples are below:
 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/yearbuilt_neighborhood.png)
+
 We can see a more precise visualization of neiborhoods that show different average prices when we se the ages of the homes as well.
 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/yearbuilt_overall.png)
+
 This is an interesting observation that the newest and most expensive homes ranked in the middle for 'Overall Condition'.
 
 # Model Preprocessing:
@@ -54,6 +56,7 @@ This regularization strength delivered a training score of .769 and a testing sc
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/ridge_scatter.png)
 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/ridge_hist.png)
+
 In spite of the decent scores, the Ridge model does not entirely satisfy regression assumptions. The residuals do not quite follow a normal distribution.
 
 The Ridge Model delivered a RMSE of 42,138.50. Transforming this number into dollars we have an idea of the error range of our housing price predictions. This is a high degree of error but it gives us room to experiment further with regularization.
@@ -64,6 +67,7 @@ The Lasso model also required significantly high regularization strength with a 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/lasso_scatter.png)
 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/lasso_hist.png)
+
 Here and with decent model scores, we can say that the residuals for the Lasso model follow an approximately normal distribution.
 
 The Ridge Model delivered a RMSE of 39,389.44. This is still high but is encouraging for Lasso Regularization in that the model had to analyze the same 193 features with no feature extraction.
@@ -77,6 +81,7 @@ The linear regression model was trained on 10 principal components for comparisi
 We can verify that the 10 Principal Components extracted are not correlated with one another in contrast to the 193 previous features:
 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_correlation.png)
+
 Effectively no correlation to speak of.
 
 The model fit on the 10 principal components delivered a train score of .835 and a test score of .754. This is about the same testing accuracy as the Lasso model but with less overfitting. The PCA model's metrics are below:
@@ -84,11 +89,13 @@ The model fit on the 10 principal components delivered a train score of .835 and
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_scatter.png)
 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_hist.png)
+
 Training the model with PCA also satisfies regression assumptions.
 
 We can also visualize how the principal components individually influence a predicted sale price by charting the values of each component's coefficient:
 
 ![](https://github.com/1aaronh/ames_housing_prices/blob/master/images/pca_coefficients.png)
+
 Fascinating result showing the marginal decrease in influence with each new Principal Component.
 
 The RMSE for the PCA model was 39,623.19. This is slighly higher than that of the Lasso model but again with less overfitting. Further experiments with different hyperparameters for PCA can be done to see if this metric can be improved.
