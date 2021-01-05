@@ -80,7 +80,7 @@ The linear regression model was trained on 10 principal components for comparisi
 
 We can verify that the 10 Principal Components extracted are not correlated with one another in contrast to the 193 previous features:
 
-![](https://github.com/1aaronh/ames_housing_prices/blob/master/Images/pca_correlation.png)
+![](./Images/pca_correlation.png)
 
 Effectively no correlation to speak of.
 
